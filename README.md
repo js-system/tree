@@ -3,25 +3,72 @@
 **With npm:**
 
 ```typescript
-npm install --save @js-system/timespan
+npm install --save @js-system/tree
 ```
 
-## SAMPLES
+## EXAMPLES
 
 ```typescript
-import { TimeSpan } from '@js-system/timespan';
+import { TreeNode } from "@js-system/tree";
 
-let time1 = TimeSpan.parse("01:00:00");
-let time2 = TimeSpan.parse("02:00:00");
+const tree = TreeNode.treeFromList(
+  [
+    {
+      id: "child1",
+      parentKey: "parent",
+    },
+    {
+      id: "parent",
+      parentKey: "root",
+    },
+    {
+      id: "child2",
+      parentKey: "parent",
+    },
+    {
+      id: "root",
+      parentKey: null,
+    },
+  ],
+  (x) => x.id,
+  (x) => x.parentKey,
+);
+```
 
-expect(time2 > time1).toBeTruthy();
-expect(time1.hours).toBe(1);
-expect(time2.hours).toBe(2);
+```typescript
+import { TreeNode } from "@js-system/tree";
 
-let time3 = TimeSpan.parse("00:00:05");
-expect(time3.hours).toBe(0);
-expect(time3.minutes).toBe(0);
-expect(time3.seconds).toBe(5);
+const tree = TreeNode.parseTree([
+  {
+    key: "root",
+    children: [
+      {
+        key: "parent",
+        children: [
+          {
+            key: "child1",
+          },
+          {
+            key: "child2",
+          },
+        ],
+      },
+    ],
+  },
+]);
+```
+
+```typescript
+import { TreeNode } from "@js-system/tree";
+
+const root = new TreeNode("root");
+const parent = new TreeNode("parent");
+const child1 = new TreeNode("child1");
+const child2 = new TreeNode("child2");
+
+root.addChildNode(parent);
+parent.addChildNode(child1);
+parent.addChildNode(child2);
 ```
 
 ## CONTRIBUTING
